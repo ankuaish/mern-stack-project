@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const authControllers = require("../controllers/auth-controller");
 
-router.get("/", (req, res) => {
-  res.status(200).send("Welcome to the world best mern series");
-});
+// router.get("/", (req, res) => {
+//   res.status(200).send("Welcome to the world best mern series using router");
+// });
 
-router.get("/register", (req, res) => {
-  res.status(200).send("Welcome to the registration Page");
-});
+router.route("/").get(authControllers.home);
+
+router.route("/register").get(authControllers.register);
 
 module.exports = router;
