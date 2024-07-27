@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = "bcrypt";
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
+// define the User schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -29,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function () {
   const user = this;
-  // console.log("actual data", this);
+  console.log("actual data", this);
 
   if (!user.isModified("password")) {
     return next();
@@ -42,6 +44,27 @@ userSchema.pre("save", async function () {
     return next(error);
   }
 });
+
+// generate json web token
+
+userSchema.methods.generateToken = async function () {
+  console.log("I am token");
+  try {
+    return jwt.sign(
+      {
+        userId: this._id.toString(),
+        email: this.email,
+        isAdmin: this.isAdmin,
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "30d",
+      }
+    );
+  } catch (error) {
+    console.log("token Error:", error);
+  }
+};
 
 const User = new mongoose.model("User", userSchema);
 module.exports = User;
