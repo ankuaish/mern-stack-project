@@ -4,10 +4,13 @@ const express = require("express");
 const app = express();
 const router = require("./router/auth-router");
 const connectDb = require("./utils/db");
+const errorMiddleware = require("./middlewares/error-middleware");
 
 app.use(express.json());
 
 app.use("/api/auth", router);
+
+app.use(errorMiddleware);
 
 // app.get("/", (req, res) => {
 //   res.status(200).send("Welcome to the world best mern series");
