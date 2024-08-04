@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authControllers = require("../controller/auth-controller");
 const validate = require("../middlewares/validate-middleware");
-const signupSchema = require("../validators/auth-validator");
+const { signupSchema, logIn } = require("../validators/auth-validator");
 
 // router.get("/", (req, res) => {
 //   res.status(200).send("Welcome to the world best mern series using router");
@@ -14,6 +14,6 @@ router
   .route("/register")
   .post(validate(signupSchema), authControllers.register);
 
-router.route("/login").post(authControllers.login);
+router.route("/login").post(validate(logIn), authControllers.login);
 
 module.exports = router;
